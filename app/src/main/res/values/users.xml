@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="user01">
+        <item name="id">1</item>
+        <item name="nameSurname">Laura Gonzalez</item>
+        <item name="age">22</item>
+        <item name="penya">CITM</item>
+        <item name="phone">66677788</item>
+        <item name="state">true</item>
+        <item name="ranking">null</item>
+        <item name="target">3</item>
+    </string-array>
+    <string-array name="user02">
+        <item name="id">2</item>
+        <item name="nameSurname">Pau Enrech</item>
+        <item name="age">23</item>
+        <item name="penya">D'asti cap Alla</item>
+        <item name="phone">666888777</item>
+        <item name="state">true</item>
+        <item name="ranking">null</item>
+        <item name="target">1</item>
+    </string-array>
+    <string-array name="user03">
+        <item name="id">3</item>
+        <item name="nameSurname">Daniel Rios</item>
+        <item name="age">23</item>
+        <item name="penya">D'asti cap Alla</item>
+        <item name="phone">666555444</item>
+        <item name="state">true</item>
+        <item name="ranking">null</item>
+        <item name="target">2</item>
+    </string-array>
+    <!-- etc. -->
+    <array name="users">
+        <item>@array/user01</item>
+        <item>@array/user02</item>
+        <item>@array/user03</item>
+        <!-- etc. -->
+    </array>
+
+</resources>
