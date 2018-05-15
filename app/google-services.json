@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "615530132144",
+    "firebase_url": "https://zanahoriaasesina-67d54.firebaseio.com",
+    "project_id": "zanahoriaasesina-67d54",
+    "storage_bucket": "zanahoriaasesina-67d54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615530132144:android:e9f9031a71b5bb63",
+        "android_client_info": {
+          "package_name": "com.pau.enrech.zanahoriaasesina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615530132144-qjqvccbvbn1akbbqekrsnsg0ltpa4bhn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pau.enrech.zanahoriaasesina",
+            "certificate_hash": "89bb4c432260cf0b52da38dcae28284833d123d7"
+          }
+        },
+        {
+          "client_id": "615530132144-6e4f2tts89aa0ar923cikmeid030286f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyEnNmx1S-osCpdQ1T3HQncYcM9bW2g9E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "615530132144-6e4f2tts89aa0ar923cikmeid030286f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

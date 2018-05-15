@@ -45,13 +45,13 @@ public class UserDatabase {
     }
 
     public static User eliminateUser(User killer, User target){
-        target.state = target.state.ELIMINATED;
-        target.rank = cont;
-        Log.d("InfoRanking", target.name +" ha quedado en "+target.rank+ " lugar.");
+        target.active = target.active.ELIMINATED;
+        target.ranking = cont;
+        Log.d("InfoRanking", target.nom +" ha quedado en "+target.ranking + " lugar.");
         cont--;
-        if (target.target == killer.name) {
+        if (target.target == killer.nom) {
             assert(cont == 1);
-            killer.rank = cont;
+            killer.ranking = cont;
             return null;
         }
         return UserDatabase.getUserFromId(target.target);

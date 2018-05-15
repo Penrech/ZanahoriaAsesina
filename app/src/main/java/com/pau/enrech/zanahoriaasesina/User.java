@@ -3,24 +3,24 @@ package com.pau.enrech.zanahoriaasesina;
 public class User {
     public enum State{ELIMINATED,ACTIVE};
 
-    public String id;
-    public String name;
-    public String surname;
+    public String nom;
+    public String cognom;
     public String penya;
     public int phone;
     public int age;
-    public State state;
-    public int rank;
+    public State active;
+    public int ranking;
     public String target;
 
-    public User(String name, String surname, String penya, int phone, int age, State state, int rank, String target) {
-        this.name = name;
-        this.surname = surname;
+    public User(){}
+    public User(String nom, String surname, String penya, int phone, int age, State state, int rank, String target) {
+        this.nom = nom;
+        this.cognom = surname;
         this.penya = penya;
         this.phone = phone;
         this.age = age;
-        this.state = state;
-        this.rank = rank;
+        this.active = state;
+        this.ranking = rank;
         this.target = target;
     }
 }
