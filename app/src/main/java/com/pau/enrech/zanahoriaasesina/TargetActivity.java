@@ -1,6 +1,7 @@
 package com.pau.enrech.zanahoriaasesina;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,12 +37,13 @@ public class TargetActivity extends AppCompatActivity {
     private TextView penya;
     private TextView winRank;
     private TextView loseRank;
-    private String jugadorId = "jugador1";
+    private String jugadorId = "jugador3";
     private String targetId;
     private String killerId;
     private ImageView img;
     private User user;
     private User target;
+    private User killer;
     private Button eliminate_btn;
     private FirebaseDatabase database;
     private DatabaseReference root;
@@ -96,7 +99,6 @@ public class TargetActivity extends AppCompatActivity {
 
         initialListeners();
     }
-/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -106,31 +108,18 @@ public class TargetActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        jugadores.removeEventListener(usersListener);
-        if (targetData != null) {
-            targetData.removeEventListener(targetsListener);
-        }
-        if (getKiller != null) {
-            getKiller.removeEventListener(killerListener);
-        }
         switch (item.getItemId()){
-            case R.id.jugador_pau:
-                jugadorId = "jugador2";
-                jugadores = database.getReference("jugadores/"+jugadorId);
+            case R.id.statics_menu_item:
+                goTo(StatisticsActivity.class);
                 break;
-            case  R.id.jugador_laura:
-                jugadorId = "jugador3";
-                jugadores = database.getReference("jugadores/"+jugadorId);
-                break;
-            case  R.id.jugador_daniel:
-                jugadorId = "jugador1";
-                jugadores = database.getReference("jugadores/"+jugadorId);
-                break;
-
         }
-        initialListeners();
         return true;
-    }*/
+    }
+
+    private  void goTo(Class activity){
+        Intent intent = new Intent(this,activity);
+        startActivity(intent);
+    }
 
     public void initialListeners(){
         // Read players
@@ -178,6 +167,21 @@ public class TargetActivity extends AppCompatActivity {
             }
         };
         jugadores.addValueEventListener(usersListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        jugadores.removeEventListener(usersListener);
+        if (targetData != null){
+            targetData.removeEventListener(targetsListener);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initialListeners();
     }
 
     public void updateData(){
@@ -264,8 +268,10 @@ public class TargetActivity extends AppCompatActivity {
         killerListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                User value = dataSnapshot.getValue(User.class);
                 for (DataSnapshot objSnapshot: dataSnapshot.getChildren()) {
                     killerId = objSnapshot.getKey();
+                    killer = objSnapshot.getValue(User.class);
                 }
                 eliminateUser();
             }
@@ -285,6 +291,14 @@ public class TargetActivity extends AppCompatActivity {
             childUpdates.put("/jugadores/" + killerId + "/target", user.target);
             childUpdates.put("/jugadores/" + jugadorId + "/target", null);
             childUpdates.put("/jugadores/" + jugadorId + "/active", "ELIMINATED");
+            String killerName = killer.nom +" "+killer.cognom;
+            String victimName = user.nom +" "+user.cognom;
+            Date date = new Date();
+            Long dateTime = date.getTime();
+            String newKey = root.child("estadisticas").push().getKey();
+            childUpdates.put("/estadisticas/" + newKey +"/date", dateTime);
+            childUpdates.put("/estadisticas/" + newKey +"/nomApKiller", killerName);
+            childUpdates.put("/estadisticas/" + newKey +"/nomApVictim", victimName);
 
 
 

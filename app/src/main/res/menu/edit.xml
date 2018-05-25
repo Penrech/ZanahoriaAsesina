@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Pau"
-        android:id="@+id/jugador_pau"
+    <item android:title="Estadísticas"
+        android:id="@+id/statics_menu_item"
         />
-    <item android:title="Laura"
-        android:id="@+id/jugador_laura"
-        />
-    <item android:title="Daniel"
-        android:id="@+id/jugador_daniel"
-        />
+
 </menu>

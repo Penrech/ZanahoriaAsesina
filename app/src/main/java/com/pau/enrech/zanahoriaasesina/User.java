@@ -11,10 +11,10 @@ public class User {
     public State active;
     public int ranking;
     public String target;
-    public String killer;
+
 
     public User(){}
-    public User(String nom, String surname, String penya, int phone, int age, State state, int rank, String target,String killer) {
+    public User(String nom, String surname, String penya, int phone, int age, State state, int rank, String target) {
         this.nom = nom;
         this.cognom = surname;
         this.penya = penya;
@@ -23,6 +23,6 @@ public class User {
         this.active = state;
         this.ranking = rank;
         this.target = target;
-        this.killer = killer;
+
     }
 }

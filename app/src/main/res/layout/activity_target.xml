@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackgroundWhite"
     tools:context=".TargetActivity">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/frame_target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        >
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/target_nameSurname"
