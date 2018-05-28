@@ -82,8 +82,6 @@ public class TargetActivity extends AppCompatActivity {
         edad = findViewById(R.id.target_age);
         penya = findViewById(R.id.target_penya);
 
-        frameWinner.setVisibility(View.GONE);
-        frameTarget.setVisibility(View.VISIBLE);
 
         //Read cont
         juego.addValueEventListener(new ValueEventListener() {

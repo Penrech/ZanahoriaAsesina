@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackgroundWhite"
+    >
+
+    <TextView
+        android:id="@+id/UserNomApText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Usuario1 Usuario1 Usuario1"
+        app:layout_constraintBaseline_toBaselineOf="@+id/UserActiveCircle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/UserActiveCircle" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/UserActiveCircle"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:width="18dp"
+        android:height="18dp"
+        android:background="@android:drawable/radiobutton_off_background"
+        android:checked="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
