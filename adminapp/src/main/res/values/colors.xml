@@ -8,4 +8,5 @@
     <color name="colorGreenActive">#FF45d734</color>
     <color name="colorRedEliminated">#FFd75d34</color>
     <color name="colorYellowLimbo">#FFedff23</color>
+    <color name="colorBlackEliminating">#734f01</color>
 </resources>

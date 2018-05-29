@@ -3,7 +3,7 @@ package com.pau.enrech.adminapp;
 
 
 public class User {
-    public enum State{ELIMINATED,ACTIVE,LIMBO,WINNER};
+    public enum State{ELIMINATED,ELIMINATING,ACTIVE,LIMBO,WINNER};
 
     public String nom;
     public String cognom;
@@ -22,6 +22,9 @@ public class User {
                 break;
             case LIMBO:
                 active= R.color.colorYellowLimbo;
+                break;
+            case ELIMINATING:
+                active= R.color.colorBlackEliminating;
                 break;
             case WINNER:
                 active = R.color.colorGreenActive;

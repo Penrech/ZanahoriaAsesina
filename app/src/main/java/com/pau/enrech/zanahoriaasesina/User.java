@@ -1,7 +1,7 @@
 package com.pau.enrech.zanahoriaasesina;
 
 public class User {
-    public enum State{ELIMINATED,ACTIVE,LIMBO,WINNER};
+    public enum State{ELIMINATED,ELIMINATING,ACTIVE,LIMBO,WINNER};
 
     public String nom;
     public String cognom;

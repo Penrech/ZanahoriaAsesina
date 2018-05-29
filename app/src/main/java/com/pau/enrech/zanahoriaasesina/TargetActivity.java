@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class TargetActivity extends AppCompatActivity {
 
-    private ConstraintLayout frameWinner,frameTarget,frameEliminated,frameLimbo;
+    private ConstraintLayout frameWinner,frameTarget,frameEliminated,frameLimbo,frameLoading;
     private TextView nameSurname;
     private TextView edad;
     private TextView penya;
@@ -73,6 +73,7 @@ public class TargetActivity extends AppCompatActivity {
         frameWinner = findViewById(R.id.frame_winner);
         frameEliminated = findViewById(R.id.frame_loser);
         frameLimbo = findViewById(R.id.confirm_elimination);
+        frameLoading = findViewById(R.id.frame_loading);
 
         loseRank = findViewById(R.id.lose_rank);
         winRank = findViewById(R.id.win_rank);
@@ -124,39 +125,37 @@ public class TargetActivity extends AppCompatActivity {
         usersListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                frameLoading.setVisibility(View.GONE);
                 User value = dataSnapshot.getValue(User.class);
                 user = value;
+
                 if (user.active == user.active.ACTIVE)
                 {
-                    frameEliminated.setVisibility(View.GONE);
-                    frameWinner.setVisibility(View.GONE);
-                    frameTarget.setVisibility(View.VISIBLE);
-                    frameLimbo.setVisibility(View.GONE);
+                    showFrame(frameTarget);
                     targetId = value.target;
                     targetData = database.getReference("jugadores/"+targetId);
                     updateData();
+                    Log.d("Entrada a user active", "valor de user "+user.nom);
                 }
-                else if(user.active == user.active.LIMBO){
-                    frameEliminated.setVisibility(View.GONE);
-                    frameWinner.setVisibility(View.GONE);
-                    frameTarget.setVisibility(View.GONE);
-                    frameLimbo.setVisibility(View.VISIBLE);
+                if (user.active == user.active.ELIMINATING){
+                    showFrame(frameLoading);
+                    Log.d("Entrada a eliminating", "valor de user "+user.nom);
+                }
+                if(user.active == user.active.LIMBO){
+                    showFrame(frameLimbo);
+                    Log.d("Entrada a limbo", "valor de user "+user.nom);
 
                 }
-                else if(user.active == user.active.ELIMINATED){
+                if(user.active == user.active.ELIMINATED){
                     loseRank.setText(String.format("%d / %d",user.ranking,contador));
-                    frameEliminated.setVisibility(View.VISIBLE);
-                    frameWinner.setVisibility(View.GONE);
-                    frameTarget.setVisibility(View.GONE);
-                    frameLimbo.setVisibility(View.GONE);
+                    showFrame(frameEliminated);
+                    Log.d("Entrada a eliminated", "valor de user "+user.nom);
 
                 }
-                else if(user.active == user.active.WINNER){
+                if(user.active == user.active.WINNER){
                     winRank.setText(String.format("%d / %d",user.ranking,contador));
-                    frameEliminated.setVisibility(View.GONE);
-                    frameWinner.setVisibility(View.VISIBLE);
-                    frameTarget.setVisibility(View.GONE);
-                    frameLimbo.setVisibility(View.GONE);
+                    showFrame(frameWinner);
+                    Log.d("Entrada a winner", "valor de user "+user.nom);
                 }
             }
             @Override
@@ -179,7 +178,7 @@ public class TargetActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        initialListeners();
+       // initialListeners();
     }
 
     public void updateData(){
@@ -188,9 +187,15 @@ public class TargetActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User value = dataSnapshot.getValue(User.class);
                 target = value;
-                nameSurname.setText(String.format("%s %s",target.nom,target.cognom));
-                edad.setText(String.format("%d",target.age));
-                penya.setText(String.format("%s",target.penya));
+                if (target.active == target.active.ELIMINATING){
+                    showFrame(frameLoading);
+                }
+                else{
+                    nameSurname.setText(String.format("%s %s",target.nom,target.cognom));
+                    edad.setText(String.format("%d",target.age));
+                    penya.setText(String.format("%s",target.penya));
+                }
+
             }
 
             @Override
@@ -239,7 +244,7 @@ public class TargetActivity extends AppCompatActivity {
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                preEliminateUser();
+                root.child("jugadores").child(jugadorId).child("active").setValue("ELIMINATING");
             }
         });
         builder.setNegativeButton(android.R.string.no, null);
@@ -262,7 +267,19 @@ public class TargetActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    public void preEliminateUser(){
+    public void showFrame(ConstraintLayout frame){
+        ConstraintLayout[] frames = new ConstraintLayout[]{frameTarget,frameEliminated,frameLoading,frameLimbo,frameWinner};
+        for (ConstraintLayout layout : frames){
+            if(layout.getId() == frame.getId()){
+                layout.setVisibility(View.VISIBLE);
+            }
+            else{
+               layout.setVisibility(View.GONE);
+            }
+            Log.d(frame.getId()+"-"+layout.getId(), layout+" visibility: "+layout.getVisibility());
+        }
+    }
+    /*public void preEliminateUser(){
         killerListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -326,6 +343,6 @@ public class TargetActivity extends AppCompatActivity {
                 Log.d("transacción", "postTransaction:onComplete:" + databaseError);
             }
         });
-    }
+    }*/
 
 }
