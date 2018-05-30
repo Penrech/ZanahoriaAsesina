@@ -175,7 +175,7 @@ public class TargetActivity extends AppCompatActivity {
 
         }
         if(user.active == user.active.ELIMINATED){
-            loseRank.setText(String.format("Has quedado el %d de %d jugadores\");",user.ranking,contador));
+            loseRank.setText(String.format("Has quedado el %d de %d jugadores",user.ranking,contador));
             showFrame(frameEliminated);
             Log.d("Entrada a eliminated", "valor de user "+user.nom);
 
@@ -188,7 +188,9 @@ public class TargetActivity extends AppCompatActivity {
             checkUserState();
         }
         else if(gameState == Game.gStates.OVER){
-            targetData.removeEventListener(targetsListener);
+            if(targetData != null) {
+                targetData.removeEventListener(targetsListener);
+            }
             overTextInfo.setText("El juego ha finalizado");
             Query checkWinner = root.child("jugadores").orderByChild("active").equalTo("WINNER");
             checkWinner.addListenerForSingleValueEvent(new ValueEventListener() {

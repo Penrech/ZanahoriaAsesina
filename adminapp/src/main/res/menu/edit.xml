@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Lista de Usuarios"
+    <item android:title="Lista de usuarios"
         android:id="@+id/user_list_item"
         />
     <item android:title="Control de juego"
         android:id="@+id/game_control_item"
+        />
+    <item android:title="Lista de reportes"
+        android:id="@+id/report_list_item"
         />
 
 </menu>

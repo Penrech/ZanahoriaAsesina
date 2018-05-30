@@ -67,6 +67,9 @@ public class StatisticsActivity extends AppCompatActivity {
             case R.id.game_control_item:
                 goTo(GameActivity.class);
                 break;
+            case R.id.report_list_item:
+                goTo(ReportListActivity.class);
+                break;
         }
         return true;
     }

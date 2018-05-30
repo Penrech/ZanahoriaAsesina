@@ -88,34 +88,6 @@ public class UsersActivity extends AppCompatActivity {
         recyclerview = findViewById(R.id.UsersRecyclerView);
         searchText = findViewById(R.id.UsersSearchInput);
 
-        /*searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String QueryText;
-                    QueryText = s.toString();
-                    Log.d("countValue", "onTextChanged: valor de count "+count);
-                    if (count == 0){
-                        queryRef = jugadores.orderByChild("cognom").limitToLast(100);
-
-                    }
-                    else{
-                        QueryText = QueryText.substring(0,1).toUpperCase() + QueryText.substring(1);
-                        queryRef = jugadores.orderByChild("nom").startAt(QueryText).endAt(QueryText + "\uf8ff");
-                    }
-                    Log.d("QueryText", "onTextChanged: valor de queryText "+QueryText);
-                    searchListUser(queryRef);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
 
         //Read active
         juego.addValueEventListener(new ValueEventListener() {
