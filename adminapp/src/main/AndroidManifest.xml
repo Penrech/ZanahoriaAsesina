@@ -16,8 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UsersActivity"
-            android:parentActivityName=".StatisticsActivity" >
+        <activity
+            android:name=".UsersActivity"
+            android:parentActivityName=".StatisticsActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StatisticsActivity" />
+        </activity>
+        <activity android:name=".GameActivity"
+            android:parentActivityName=".StatisticsActivity">
+
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

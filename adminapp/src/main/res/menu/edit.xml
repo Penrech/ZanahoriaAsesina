@@ -4,5 +4,8 @@
     <item android:title="Lista de Usuarios"
         android:id="@+id/user_list_item"
         />
+    <item android:title="Control de juego"
+        android:id="@+id/game_control_item"
+        />
 
 </menu>

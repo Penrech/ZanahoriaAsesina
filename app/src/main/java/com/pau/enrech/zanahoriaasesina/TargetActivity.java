@@ -19,24 +19,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Date;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TargetActivity extends AppCompatActivity {
 
-    private ConstraintLayout frameWinner,frameTarget,frameEliminated,frameLimbo,frameLoading;
+    private ConstraintLayout frameWinner,frameTarget,frameEliminated,frameLimbo,frameLoading, frameOver;
     private TextView nameSurname;
     private TextView edad;
     private TextView penya;
     private TextView winRank;
     private TextView loseRank;
+    private TextView overTextWinner, overTextRanking, overTextInfo;
     private String jugadorId = "jugador3";
     private String targetId;
     private String killerId;
@@ -50,12 +44,15 @@ public class TargetActivity extends AppCompatActivity {
     private DatabaseReference targetData;
     private DatabaseReference jugadores;
     private DatabaseReference juego;
-    private DatabaseReference JugadoresActivos;
+    private DatabaseReference winner;
     private int contador;
+    private Game.gStates gameState;
+    private Game.gStates prevGameState;
+    private Game gameData;
     private int activos;
     private ValueEventListener usersListener;
     private ValueEventListener targetsListener;
-    private ValueEventListener killerListener;
+    private ValueEventListener winnerListener;
     private Query getKiller;
 
     @Override
@@ -67,28 +64,44 @@ public class TargetActivity extends AppCompatActivity {
         root = database.getReference();
         jugadores = database.getReference("jugadores/"+jugadorId);
         juego = database.getReference("juego");
-        JugadoresActivos = database.getReference("juego/activos");
+
 
         frameTarget = findViewById(R.id.frame_target);
         frameWinner = findViewById(R.id.frame_winner);
         frameEliminated = findViewById(R.id.frame_loser);
         frameLimbo = findViewById(R.id.confirm_elimination);
         frameLoading = findViewById(R.id.frame_loading);
+        frameOver = findViewById(R.id.frame_endGame);
 
         loseRank = findViewById(R.id.lose_rank);
         winRank = findViewById(R.id.win_rank);
         eliminate_btn = findViewById(R.id.target_eliminate);
         img = findViewById(R.id.target_photo);
-        nameSurname = findViewById(R.id.target_nameSurname);
+        nameSurname = findViewById(R.id.target_name);
         edad = findViewById(R.id.target_age);
         penya = findViewById(R.id.target_penya);
+        overTextWinner = findViewById(R.id.endGameWinner);
+        overTextRanking = findViewById(R.id.endGamePosition);
+        overTextInfo = findViewById(R.id.endGameText);
 
 
-        //Read cont
         juego.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 contador = dataSnapshot.child("totales").getValue(Integer.class);
+                activos = dataSnapshot.child("activos").getValue(Integer.class);
+                Game Value = dataSnapshot.getValue(Game.class);
+                gameData = Value;
+                gameState = Value.estado;
+                if(prevGameState == null){
+                    prevGameState = gameState;
+                    initialListeners();
+                }
+                else if (prevGameState != gameState){
+                    prevGameState = gameState;
+                    checkGameState();
+                }
+                Log.d("PrevGameState", "prevGameState: "+prevGameState);
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -96,7 +109,7 @@ public class TargetActivity extends AppCompatActivity {
             }
         });
 
-        initialListeners();
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,6 +133,7 @@ public class TargetActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
     public void initialListeners(){
         // Read players
         usersListener = new ValueEventListener() {
@@ -128,35 +142,8 @@ public class TargetActivity extends AppCompatActivity {
                 frameLoading.setVisibility(View.GONE);
                 User value = dataSnapshot.getValue(User.class);
                 user = value;
+                checkGameState();
 
-                if (user.active == user.active.ACTIVE)
-                {
-                    showFrame(frameTarget);
-                    targetId = value.target;
-                    targetData = database.getReference("jugadores/"+targetId);
-                    updateData();
-                    Log.d("Entrada a user active", "valor de user "+user.nom);
-                }
-                if (user.active == user.active.ELIMINATING){
-                    showFrame(frameLoading);
-                    Log.d("Entrada a eliminating", "valor de user "+user.nom);
-                }
-                if(user.active == user.active.LIMBO){
-                    showFrame(frameLimbo);
-                    Log.d("Entrada a limbo", "valor de user "+user.nom);
-
-                }
-                if(user.active == user.active.ELIMINATED){
-                    loseRank.setText(String.format("%d / %d",user.ranking,contador));
-                    showFrame(frameEliminated);
-                    Log.d("Entrada a eliminated", "valor de user "+user.nom);
-
-                }
-                if(user.active == user.active.WINNER){
-                    winRank.setText(String.format("%d / %d",user.ranking,contador));
-                    showFrame(frameWinner);
-                    Log.d("Entrada a winner", "valor de user "+user.nom);
-                }
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -164,7 +151,89 @@ public class TargetActivity extends AppCompatActivity {
             }
         };
         jugadores.addValueEventListener(usersListener);
+
     }
+
+
+
+    public void checkUserState(){
+        if (user.active == user.active.ACTIVE)
+        {
+            showFrame(frameTarget);
+            targetId = user.target;
+            targetData = database.getReference("jugadores/"+targetId);
+            updateData();
+            Log.d("Entrada a user active", "valor de user "+user.nom);
+        }
+        if (user.active == user.active.ELIMINATING){
+            showFrame(frameLoading);
+            Log.d("Entrada a eliminating", "valor de user "+user.nom);
+        }
+        if(user.active == user.active.LIMBO){
+            showFrame(frameLimbo);
+            Log.d("Entrada a limbo", "valor de user "+user.nom);
+
+        }
+        if(user.active == user.active.ELIMINATED){
+            loseRank.setText(String.format("Has quedado el %d de %d jugadores\");",user.ranking,contador));
+            showFrame(frameEliminated);
+            Log.d("Entrada a eliminated", "valor de user "+user.nom);
+
+        }
+
+    }
+
+    public void checkGameState(){
+        if (gameState == Game.gStates.ACTIVE){
+            checkUserState();
+        }
+        else if(gameState == Game.gStates.OVER){
+            targetData.removeEventListener(targetsListener);
+            overTextInfo.setText("El juego ha finalizado");
+            Query checkWinner = root.child("jugadores").orderByChild("active").equalTo("WINNER");
+            checkWinner.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.getValue() != null){
+                        User ganador = null;
+                        for (DataSnapshot jugador: dataSnapshot.getChildren()){
+                            ganador = jugador.getValue(User.class);
+                        }
+                        if(user.active == ganador.active){
+                            overTextWinner.setText("¡Enhorabuena!, eres el ganador");
+                            overTextRanking.setText("Has sido el primero de "+gameData.totales+" jugadores");
+                        }
+                        else{
+                            overTextWinner.setText("El ganador es "+ganador.nom+" "+ganador.cognom);
+                            overTextRanking.setText("Has sido eliminado y has quedado el "+user.ranking+" de "+gameData.totales+" jugadores");
+                        }
+                    }
+                    else{
+                        overTextWinner.setText("Sin un ganador");
+                        if(user.ranking == -1){
+                            overTextRanking.setText("No has llegado a ser eliminado, quedando entre los "+gameData.activos+" primeros");
+                        }
+                        else{
+                            overTextRanking.setText("Has sido eliminado y has quedado el "+user.ranking+" de "+gameData.totales+" jugadores");
+                        }
+                    }
+                    showFrame(frameOver);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("error datos winner", "Failed to read value.", databaseError.toException());
+                }
+            });
+        }
+        else{
+            overTextInfo.setText("El juego se encuentra inactivo actualmente");
+            overTextRanking.setText("");
+            overTextWinner.setText("");
+            showFrame(frameOver);
+        }
+    }
+
 
     @Override
     protected void onStop() {
@@ -268,7 +337,7 @@ public class TargetActivity extends AppCompatActivity {
     }
 
     public void showFrame(ConstraintLayout frame){
-        ConstraintLayout[] frames = new ConstraintLayout[]{frameTarget,frameEliminated,frameLoading,frameLimbo,frameWinner};
+        ConstraintLayout[] frames = new ConstraintLayout[]{frameTarget,frameEliminated,frameLoading,frameLimbo,frameWinner,frameOver};
         for (ConstraintLayout layout : frames){
             if(layout.getId() == frame.getId()){
                 layout.setVisibility(View.VISIBLE);
@@ -279,70 +348,6 @@ public class TargetActivity extends AppCompatActivity {
             Log.d(frame.getId()+"-"+layout.getId(), layout+" visibility: "+layout.getVisibility());
         }
     }
-    /*public void preEliminateUser(){
-        killerListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User value = dataSnapshot.getValue(User.class);
-                for (DataSnapshot objSnapshot: dataSnapshot.getChildren()) {
-                    killerId = objSnapshot.getKey();
-                    killer = objSnapshot.getValue(User.class);
-                }
-                eliminateUser();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        getKiller = root.child("jugadores").orderByChild("target").equalTo(jugadorId);
-        getKiller.addListenerForSingleValueEvent(killerListener);
-
-    }
-    public void eliminateUser(){
-
-            final Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("/jugadores/" + killerId + "/target", user.target);
-            childUpdates.put("/jugadores/" + jugadorId + "/target", null);
-            childUpdates.put("/jugadores/" + jugadorId + "/active", "ELIMINATED");
-            String killerName = killer.nom +" "+killer.cognom;
-            String victimName = user.nom +" "+user.cognom;
-            Date date = new Date();
-            Long dateTime = date.getTime();
-            String newKey = root.child("estadisticas").push().getKey();
-            childUpdates.put("/estadisticas/" + newKey +"/date", dateTime);
-            childUpdates.put("/estadisticas/" + newKey +"/nomApKiller", killerName);
-            childUpdates.put("/estadisticas/" + newKey +"/nomApVictim", victimName);
-
-
-
-            JugadoresActivos.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-
-                    int activeCont = mutableData.getValue(Integer.class);
-                    mutableData.setValue(activeCont-1);
-                    return Transaction.success(mutableData);
-
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getValue(Integer.class) == 1){
-                        childUpdates.put("/jugadores/" + killerId + "/ranking", dataSnapshot.getValue(Integer.class));
-                        childUpdates.put("/jugadores/" + killerId + "/active", "WINNER");
-                        childUpdates.put("/jugadores/" + jugadorId + "/ranking", dataSnapshot.getValue(Integer.class)+1);
-                    }
-                    else{
-                        childUpdates.put("/jugadores/" + jugadorId + "/ranking", dataSnapshot.getValue(Integer.class)+1);
-                    }
-                    root.updateChildren(childUpdates);
-                // Transaction completed
-                Log.d("transacción", "postTransaction:onComplete:" + databaseError);
-            }
-        });
-    }*/
 
 }

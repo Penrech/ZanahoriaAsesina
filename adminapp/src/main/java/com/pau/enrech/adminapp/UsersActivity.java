@@ -48,8 +48,9 @@ public class UsersActivity extends AppCompatActivity {
     private DatabaseReference root;
     private FirebaseRecyclerAdapter<User, UsersActivity.UsersViewHolder> adapter;
     private DatabaseReference jugadores;
-    private DatabaseReference activos;
+    private DatabaseReference juego;
     private int activeUsers = 0;
+    private Game.gStates gameState;
     private EditText searchText;
     private Query queryRef;
 
@@ -83,7 +84,7 @@ public class UsersActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         root = database.getReference();
         jugadores = root.child("jugadores");
-        activos = root.child("juego").child("activos");
+        juego = root.child("juego");
         recyclerview = findViewById(R.id.UsersRecyclerView);
         searchText = findViewById(R.id.UsersSearchInput);
 
@@ -117,10 +118,12 @@ public class UsersActivity extends AppCompatActivity {
         });*/
 
         //Read active
-        activos.addValueEventListener(new ValueEventListener() {
+        juego.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                activeUsers = dataSnapshot.getValue(Integer.class);
+                Game value = dataSnapshot.getValue(Game.class);
+                activeUsers = value.activos;
+                gameState = value.estado;
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -171,6 +174,7 @@ public class UsersActivity extends AppCompatActivity {
                 else{
                     holder.user_elim.setVisibility(View.GONE);
                 }
+                if(gameState == Game.gStates.ACTIVE){
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -179,6 +183,7 @@ public class UsersActivity extends AppCompatActivity {
                         }
                     }
                 });
+                }
             }
         };
 
