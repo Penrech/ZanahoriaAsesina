@@ -2,6 +2,9 @@ package com.pau.enrech.zanahoriaasesina;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.InputStream;
 
 public class TargetActivity extends AppCompatActivity {
 
@@ -54,6 +59,31 @@ public class TargetActivity extends AppCompatActivity {
     private ValueEventListener targetsListener;
     private ValueEventListener winnerListener;
     private Query getKiller;
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,7 +270,8 @@ public class TargetActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        jugadores.removeEventListener(usersListener);
+        if (jugadores != null){
+        jugadores.removeEventListener(usersListener);}
         if (targetData != null){
             targetData.removeEventListener(targetsListener);
         }
@@ -265,6 +296,7 @@ public class TargetActivity extends AppCompatActivity {
                     nameSurname.setText(String.format("%s %s",target.nom,target.cognom));
                     edad.setText(String.format("%d",target.age));
                     penya.setText(String.format("%s",target.penya));
+                    loadImageFromUrl(target.img,img);
                 }
 
             }
@@ -306,6 +338,15 @@ public class TargetActivity extends AppCompatActivity {
         }
 
     }
+    public void startReport(View view){
+        Intent intent = new Intent(this,ReportActivity.class);
+        intent.putExtra("nombreAReportar",target.getNomAp());
+        intent.putExtra("nombreReportador",user.getNomAp());
+        intent.putExtra("idAReportar",targetId);
+        intent.putExtra("idUser",jugadorId);
+        startActivity(intent);
+    }
+
     public void acceptUserElimination(View view){
         String msg = "¿Aceptar haber sido eliminad@?";
         String title = "Confirmar eliminación";
@@ -349,6 +390,11 @@ public class TargetActivity extends AppCompatActivity {
             }
             Log.d(frame.getId()+"-"+layout.getId(), layout+" visibility: "+layout.getVisibility());
         }
+    }
+
+    public void loadImageFromUrl(String url,ImageView image){
+        new DownloadImageTask(image)
+                .execute(url);
     }
 
 

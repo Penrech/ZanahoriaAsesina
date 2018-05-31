@@ -11,10 +11,14 @@ public class User {
     public State active;
     public int ranking;
     public String target;
+    public String img;
 
+    public String getNomAp(){
+        return String.format("%s %s",this.nom,this.cognom);
+    }
 
     public User(){}
-    public User(String nom, String surname, String penya, int phone, int age, State state, int rank, String target) {
+    public User(String nom, String surname, String penya, int phone, int age, State state, int rank, String target,String img) {
         this.nom = nom;
         this.cognom = surname;
         this.penya = penya;
@@ -23,6 +27,7 @@ public class User {
         this.active = state;
         this.ranking = rank;
         this.target = target;
+        this.img = img;
 
     }
 }
