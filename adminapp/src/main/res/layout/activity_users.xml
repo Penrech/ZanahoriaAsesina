@@ -43,30 +43,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="45dp"
             android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="45dp"
             android:layout_marginTop="16dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_userSearch"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/usersTextView" />
 
         <Button
             android:id="@+id/btn_userSearch"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:background="@android:drawable/ic_menu_search"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginRight="45dp"
+            android:background="@mipmap/ic_search_foreground"
             android:onClick="searchForUser"
-            app:layout_constraintStart_toEndOf="@+id/UsersSearchInput"
-            app:layout_constraintTop_toBottomOf="@+id/usersTextView" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/UsersSearchInput"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

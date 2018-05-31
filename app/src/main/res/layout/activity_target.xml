@@ -70,7 +70,7 @@
             android:layout_marginLeft="60dp"
             android:layout_marginStart="60dp"
             android:layout_marginTop="8dp"
-            android:background="@android:drawable/ic_menu_close_clear_cancel"
+            android:background="@mipmap/ic_eliminate_foreground"
             android:onClick="demandUserElimination"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
             android:layout_marginRight="60dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="?android:attr/alertDialogIcon"
+            android:background="@mipmap/ic_report_foreground"
             android:onClick="startReport"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +101,7 @@
         android:id="@+id/frame_endGame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/endGameText"
@@ -130,7 +130,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_gallery" />
+            app:srcCompat="@mipmap/ic_carrot_round" />
 
         <TextView
             android:id="@+id/endGameWinner"
@@ -323,7 +323,7 @@
         android:id="@+id/frame_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <ProgressBar
