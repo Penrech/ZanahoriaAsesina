@@ -1,4 +1,4 @@
-# ZanahoriaAsesina
+
 <h1>Juego Zanahoria Asesina</h1>
 
 <h1>Tecnología</h1>
@@ -6,10 +6,10 @@
   <li> Android Studio(Java): https://developer.android.com/studio/intro/ </li>
   <li> Firebase: https://firebase.google.com/?hl=es-419 
     <ul>
-      <li>Firebase Realtime Database</li>
-      <li>Firebase Authentication</li>
-      <li>Firebase Storage</li>
-      <li>Firebase Cloud Functions</li>
+      <li>Firebase Realtime Database : https://firebase.google.com/docs/database/?hl=es-419</li>
+      <li>Firebase Authentication :  https://firebase.google.com/docs/auth/?hl=es-419</li>
+      <li>Firebase Storage : https://firebase.google.com/docs/storage/?hl=es-419</li>
+      <li>Firebase Cloud Functions : https://firebase.google.com/docs/functions/?hl=es-419</li>
     </ul>
   </li>
 </ul>
